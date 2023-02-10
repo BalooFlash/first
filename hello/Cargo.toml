@@ -26,3 +26,4 @@ bcrypt = "0.13.0"
 uuid = {version = "1.0.0", features = ["serde", "v4"]}
 chrono = { version = "0.4.19", features = ["serde"]}
 jsonwebtoken = "8.1.0"
+redis = "0.21.5"

@@ -12,3 +12,8 @@ services:
       - 'POSTGRES_USER=flash'
       - 'POSTGRES_DB=to_do'
       - 'POSTGRES_PASSWORD=flash'
+  redis:
+    container_name: 'to_do_redis'
+    image: 'redis:5.0.5'
+    ports:
+      - '6379:6379'
