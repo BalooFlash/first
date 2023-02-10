@@ -1,3 +1,4 @@
 DB_URL: postgres://flash:flash@localhost:5432/to_do
 SECRET_KEY: secret
-EXPIRE_MINUTES: 60
+EXPIRE_MINUTES: 120
+REDIS_URL: redis://localhost/
