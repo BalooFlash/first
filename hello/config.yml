@@ -1,0 +1,3 @@
+DB_URL: postgres://flash:flash@localhost:5432/to_do
+SECRET_KEY: secret
+EXPIRE_MINUTES: 60
