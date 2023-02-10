@@ -21,27 +21,26 @@ mod config;
 #[actix_web::main]
 async fn main() -> std::io::Result <()> {
     const ALLOWED_VERSION: &'static str = include_str!("./output_data.txt");
-
+    println!("{:?}", ALLOWED_VERSION);
     HttpServer::new( || {
         let cors = Cors::default().allow_any_origin()
                                 .allow_any_method()
                                 .allow_any_header();
         let app = App::new()
             .wrap_fn(|req, srv| {
-                println!("{}", OUTCOME);
                 let passed: bool;
 
-                if *&req.pat().contains(&format!("/{}/", ALLOWED_VERSION)) {
-                    passed = false;
-                } else {
+                if *&req.path().contains(&format!("/{}/", ALLOWED_VERSION)) {
                     passed = true;
+                } else {
+                    passed = false;
                 }
-
+                println!("{}", passed);
                 let end_result;
                 if passed == true {
                     end_result = Either::Left(srv.call(req));
                 }else {
-                    let resp = HttpResponse::NotImplemented().body("only {} API is no longer supported", ALLOWED_VERSION);
+                    let resp = HttpResponse::NotImplemented().body(format!("only {} API is no longer supported", ALLOWED_VERSION));
                     end_result = Either::Right(ok(req.into_response(resp).map_into_boxed_body()))
                 }
                 async move {
