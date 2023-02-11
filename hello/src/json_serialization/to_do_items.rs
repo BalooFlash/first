@@ -1,24 +1,20 @@
-
 use crate::diesel;
 use diesel::prelude::*;
 
-use crate::database::establish_connection;
+use crate::database::DBCONNECTION;
 use crate::models::item::item::Item;
 use crate::schema::to_do;
 
 use serde::Serialize;
 use std::vec::Vec;
 
-// use serde_json::value::Value;
-// use serde_json::Map;
-
-use actix_web:: {
-    body::BoxBody, http::header::ContentType, HttpRequest, HttpResponse, Responder
+use actix_web::{
+    body::BoxBody, http::header::ContentType,
+    HttpRequest, HttpResponse, Responder,
 };
 
 use crate::to_do::ItemTypes;
 use crate::to_do::structs::base::Base;
-// use crate::state::read_file;
 use crate::to_do::{to_do_factory, enums::TaskStatus};
 
 
@@ -55,25 +51,14 @@ impl ToDoItems {
         }
     }
 
-    // pub fn get_state() -> ToDoItems {
-    //     let state: Map<String, Value> = read_file("./state.json");
-    //     let mut array_buffer = Vec::new();
-
-    //     for (key, value) in state {
-    //         let status = TaskStatus::from_string(value.as_str().unwrap().to_string());
-    //         let item = to_do_factory(&key, status);
-    //         array_buffer.push(item);
-    //     }
-    //     return ToDoItems::new(array_buffer)
-    // }
     pub fn get_state(user_id: i32) -> ToDoItems {
-        let connection = establish_connection();
-        
-        let items = to_do::table    
-            .filter(to_do::columns::user_id.eq(&user_id))
-            .order(to_do::columns::id.asc())
-            .load::<Item>(&connection)
-            .unwrap();
+        let connection = DBCONNECTION.db_connection.get().unwrap();
+
+        let items = to_do::table.filter(to_do::columns::user_id.eq(&user_id))
+                                .order(to_do::columns::id.asc())
+                                .load::<Item>(&connection)
+                                .unwrap();
+
         let mut array_buffer = Vec::with_capacity(items.len());
 
         for item in items {
@@ -83,13 +68,13 @@ impl ToDoItems {
         }
         return ToDoItems::new(array_buffer)
     }
-    
 }
 
 impl Responder for ToDoItems {
     type Body = BoxBody;
 
-    fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
+    fn respond_to(self, _req: &HttpRequest)
+                  -> HttpResponse<Self::Body> {
         let body = serde_json::to_string(&self).unwrap();
         HttpResponse::Ok()
             .content_type(ContentType::json())

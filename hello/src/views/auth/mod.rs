@@ -1,7 +1,5 @@
 mod login;
 mod logout;
-
-
 use actix_web::web::{ServiceConfig, get, post, scope};
 
 

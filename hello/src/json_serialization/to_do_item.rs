@@ -1,7 +1,10 @@
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug)]
+
+#[derive(Deserialize)]
 pub struct ToDoItem {
     pub title: String,
     pub status: String
 }
+
+

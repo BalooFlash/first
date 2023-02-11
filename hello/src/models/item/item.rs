@@ -1,7 +1,7 @@
-
 use crate::schema::to_do;
 use chrono::NaiveDateTime;
 use super::super::user::user::User;
+
 
 #[derive(Queryable, Identifiable, Associations)]
 #[belongs_to(User)]
@@ -11,6 +11,6 @@ pub struct Item {
     pub title: String,
     pub status: String,
     pub date: NaiveDateTime,
-    pub user_id: i32
+    pub user_id: i32,
 }
 

@@ -1,6 +1,4 @@
-// @generated automatically by Diesel CLI.
-
-diesel::table! {
+table! {
     to_do (id) {
         id -> Int4,
         title -> Varchar,
@@ -10,7 +8,7 @@ diesel::table! {
     }
 }
 
-diesel::table! {
+table! {
     users (id) {
         id -> Int4,
         username -> Varchar,
@@ -20,9 +18,9 @@ diesel::table! {
     }
 }
 
-diesel::joinable!(to_do -> users (user_id));
+joinable!(to_do -> users (user_id));
 
-diesel::allow_tables_to_appear_in_same_query!(
+allow_tables_to_appear_in_same_query!(
     to_do,
     users,
 );
